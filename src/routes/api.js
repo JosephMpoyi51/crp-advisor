@@ -1,10 +1,27 @@
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const { getPool, allTools, featuredTools, getTool, getCategories, getArticles, getArticle, insert, dashboardStats, adminList, setReviewStatus, deleteRow, upsertTool } = require("../lib/db");
+const multer = require("multer");
+const { getPool, allTools, featuredTools, getTool, getCategories, getArticles, getArticle, insert, dashboardStats, adminList, setReviewStatus, deleteRow, upsertTool, upsertArticle } = require("../lib/db");
 const { scoreTools } = require("../lib/scoring");
 const { signAdmin, requireAdmin } = require("../middleware/auth");
 
 const router = express.Router();
+const uploadDir = path.join(process.cwd(), "public", "uploads", "media");
+fs.mkdirSync(uploadDir, { recursive: true });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, uploadDir),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname || "").toLowerCase() || ".jpg";
+      const base = path.basename(file.originalname || "image", ext).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80) || "image";
+      cb(null, `${Date.now()}-${base}${ext}`);
+    }
+  }),
+  limits: { fileSize: 60 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => cb(null, /^image\//.test(file.mimetype || ""))
+});
 
 router.get("/health", (req, res) => res.json({ ok: true, name: "CRP Advisor", time: new Date().toISOString() }));
 router.get("/categories", asyncHandler(async (req, res) => res.json(await getCategories())));
@@ -75,15 +92,33 @@ router.post("/admin/login", asyncHandler(async (req, res) => {
 }));
 router.post("/admin/logout", (req, res) => { res.clearCookie("admin_token", cookieOptions()); res.status(204).end(); });
 router.get("/admin/stats", requireAdmin, asyncHandler(async (req, res) => res.json(await dashboardStats())));
+router.get("/admin/media", requireAdmin, asyncHandler(async (req, res) => res.json(listMedia())));
+router.post("/admin/media", requireAdmin, (req, res, next) => {
+  upload.single("image")(req, res, (error) => {
+    if (error) return next(error);
+    if (!req.file) return res.status(400).json({ error: "Image requise" });
+    res.status(201).json(mediaFromFile(req.file));
+  });
+});
 router.get("/admin/:table", requireAdmin, asyncHandler(async (req, res) => {
   const allowed = ["tools", "reviews", "newsletter_subscribers", "leads", "contact_messages", "tool_suggestions", "articles", "promo_codes"];
   if (!allowed.includes(req.params.table)) return res.status(404).json({ error: "Table inconnue" });
   res.json(await adminList(req.params.table));
 }));
 router.post("/admin/tools", requireAdmin, asyncHandler(async (req, res) => res.status(201).json(await upsertTool(req.body))));
+router.post("/admin/articles", requireAdmin, asyncHandler(async (req, res) => res.status(201).json(await upsertArticle(req.body))));
 router.patch("/admin/reviews/:id", requireAdmin, asyncHandler(async (req, res) => res.json(await setReviewStatus(req.params.id, Boolean(req.body.approved)))));
 router.delete("/admin/reviews/:id", requireAdmin, asyncHandler(async (req, res) => res.json(await deleteRow("reviews", req.params.id))));
 
+function listMedia() {
+  if (!fs.existsSync(uploadDir)) return [];
+  return fs.readdirSync(uploadDir).filter((name) => /\.(png|jpe?g|gif|webp|avif)$/i.test(name)).map((name) => {
+    const filePath = path.join(uploadDir, name);
+    const stat = fs.statSync(filePath);
+    return { name, url: `/uploads/media/${name}`, size: stat.size, created_at: stat.birthtime };
+  }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+}
+function mediaFromFile(file) { return { name: file.filename, url: `/uploads/media/${file.filename}`, size: file.size, mimetype: file.mimetype }; }
 function clean(value) { return String(value || "").trim(); }
 function cookieOptions() { return { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 12 * 60 * 60 * 1000 }; }
 function asyncHandler(fn) { return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next); }
