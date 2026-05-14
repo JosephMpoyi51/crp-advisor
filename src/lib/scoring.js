@@ -1,9 +1,10 @@
-function scoreTools(tools, answers) {
+function scoreTools(tools, answers = {}) {
   const weights = { besoin: 34, budget: 20, niveau: 14, priorite: 12, api: 10, francais: 10 };
   const limits = { gratuit: 0, petit: 15, moyen: 40, eleve: Infinity };
 
   return tools
     .map((tool) => {
+      const levels = Array.isArray(tool.levels) ? tool.levels : [];
       const besoin = !answers.besoin ? weights.besoin * 0.5 : tool.category === answers.besoin ? weights.besoin : weights.besoin * 0.12;
       const price = Number(tool.monthly_price || 0);
       let budget = weights.budget * 0.5;
@@ -16,8 +17,8 @@ function scoreTools(tools, answers) {
         else budget = Math.round(weights.budget * Math.min(limit / price, 1));
       }
 
-      const niveau = !answers.niveau ? weights.niveau * 0.5 : tool.levels.includes(answers.niveau) ? weights.niveau : 0;
-      const priorite = scorePriority(tool, answers.priorite, weights.priorite);
+      const niveau = !answers.niveau ? weights.niveau * 0.5 : levels.includes(answers.niveau) ? weights.niveau : 0;
+      const priorite = scorePriority({ ...tool, levels }, answers.priorite, weights.priorite);
       const api = !answers.apiRequise ? weights.api : tool.api_available ? weights.api : 0;
       const francais = !answers.francaisRequis ? weights.francais : tool.french_support ? weights.francais : 0;
       const score = besoin + budget + niveau + priorite + api + francais;
@@ -26,7 +27,7 @@ function scoreTools(tools, answers) {
         ...tool,
         score_total: score,
         score_details: { besoin, budget, niveau, priorite, api, francais },
-        explanation: explain(tool, answers, score)
+        explanation: explain({ ...tool, levels }, answers)
       };
     })
     .sort((a, b) => b.score_total - a.score_total);
@@ -42,12 +43,12 @@ function scorePriority(tool, priority, max) {
 }
 
 function explain(tool, answers) {
-  const parts = [`${tool.name} correspond bien a votre profil.`];
-  if (answers.besoin && tool.category === answers.besoin) parts.push("Il repond directement a votre besoin principal.");
+  const parts = [`${tool.name} correspond bien à votre profil.`];
+  if (answers.besoin && tool.category === answers.besoin) parts.push("Il répond directement à votre besoin principal.");
   if (answers.budget === "gratuit" && Number(tool.monthly_price || 0) === 0) parts.push("Son offre gratuite respecte votre budget.");
-  if (answers.niveau && tool.levels.includes(answers.niveau)) parts.push("Son niveau d'utilisation est adapte a votre experience.");
-  if (answers.apiRequise && tool.api_available) parts.push("Une API est disponible pour vos integrations.");
-  if (answers.francaisRequis && tool.french_support) parts.push("Le support du francais est disponible.");
+  if (answers.niveau && tool.levels.includes(answers.niveau)) parts.push("Son niveau d'utilisation est adapté à votre expérience.");
+  if (answers.apiRequise && tool.api_available) parts.push("Une API est disponible pour vos intégrations.");
+  if (answers.francaisRequis && tool.french_support) parts.push("Le support du français est disponible.");
   return parts.join(" ");
 }
 
