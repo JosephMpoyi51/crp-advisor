@@ -2,7 +2,7 @@
   if (typeof adminPage !== "function") return;
 
   adminPage = function articleAdminPage() {
-    return `<section class="admin-layout"><aside class="admin-side"><a href="#" data-admin-section="dashboard">Tableau de bord</a><a href="#" data-admin-section="tools">Outils</a><a href="#" data-admin-section="articles">Articles</a><a href="#" data-admin-section="leads">Leads</a><a href="#" data-admin-section="reviews">Avis</a><a href="#" data-admin-section="messages">Messages</a><button class="btn ghost admin-logout" type="button" data-admin-logout>Déconnexion</button></aside><main class="admin-main" data-admin-main>${adminLogin()}</main></section>`;
+    return `<section class="admin-login-only"><main class="admin-main" data-admin-main>${adminLogin()}</main></section>`;
   };
 
   const previousRenderAdminSection = renderAdminSection;
