@@ -11,7 +11,7 @@
   const attr = (value) => esc(value).replace(/`/g, "&#096;");
   const imageFor = (article) => article.featured_image_url || defaultImages[article.slug] || "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1400&q=80";
   const countWords = (value) => String(value || "").trim().split(/\s+/).filter(Boolean).length;
-  const teaser = (article, limit = 50) => {
+  const teaser = (article, limit = 60) => {
     const text = `${article.excerpt || ""} ${article.content || ""}`.replace(/\s+/g, " ").trim();
     const words = text.split(" ").filter(Boolean);
     return `${words.slice(0, limit).join(" ")}${words.length > limit ? "..." : ""}`;
@@ -22,17 +22,17 @@
   async function getArticlesFull() {
     const list = await fetch("/api/articles", { credentials: "include" }).then((res) => res.json()).catch(() => []);
     return Promise.all(list.map(async (article) => {
-      if (countWords(`${article.excerpt || ""} ${article.content || ""}`) >= 50) return article;
+      if (countWords(`${article.excerpt || ""} ${article.content || ""}`) >= 60) return article;
       return fetch(`/api/articles/${article.slug}`, { credentials: "include" }).then((res) => res.ok ? res.json() : article).catch(() => article);
     }));
   }
 
   function slide(article) {
-    return `<a class="latest-slide latest-slide-media" href="/blog/${article.slug}" data-link><img src="${attr(imageFor(article))}" alt="" loading="lazy"><div class="latest-slide-body"><span class="tag">${esc(article.category || "Guide")}</span><h3>${esc(article.title)}</h3><p>${esc(teaser(article, 50))}</p><div class="article-meta"><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></div></a>`;
+    return `<a class="latest-slide latest-slide-media" href="/blog/${article.slug}" data-link><img src="${attr(imageFor(article))}" alt="" loading="lazy"><div class="latest-slide-body"><span class="tag">${esc(article.category || "Guide")}</span><h3>${esc(article.title)}</h3><p>${esc(teaser(article, 60))}</p><div class="article-meta"><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></div></a>`;
   }
 
   function blogCard(article) {
-    return `<a class="blog-card blog-card-media" href="/blog/${article.slug}" data-link><img src="${attr(imageFor(article))}" alt="" loading="lazy"><span class="tag">${esc(article.category || "Guide")}</span><h2>${esc(article.title)}</h2><p>${esc(teaser(article, 50))}</p><div class="article-meta"><span>${esc(article.author || "CRP Advisor")}</span><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></a>`;
+    return `<a class="blog-card blog-card-media" href="/blog/${article.slug}" data-link><img src="${attr(imageFor(article))}" alt="" loading="lazy"><span class="tag">${esc(article.category || "Guide")}</span><h2>${esc(article.title)}</h2><p>${esc(teaser(article, 60))}</p><div class="article-meta"><span>${esc(article.author || "CRP Advisor")}</span><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></a>`;
   }
 
   async function applyBlogFinalFixes() {
