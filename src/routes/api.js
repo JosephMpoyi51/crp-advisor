@@ -10,6 +10,18 @@ router.get("/health", (req, res) => res.json({ ok: true, name: "CRP Advisor", ti
 router.get("/categories", asyncHandler(async (req, res) => res.json(await getCategories())));
 router.get("/tools", asyncHandler(async (req, res) => res.json(await allTools({ category: req.query.category, search: req.query.search }))));
 router.get("/tools/featured", asyncHandler(async (req, res) => res.json(await featuredTools())));
+router.get("/trending-tools", asyncHandler(async (req, res) => {
+  const limit = Math.max(1, Math.min(8, Number(req.query.limit || 4)));
+  const period = req.query.period === "day" ? "DAY" : "WEEK";
+  const db = getPool();
+  const tools = await allTools();
+  if (!db) return res.json(tools.sort((a, b) => b.editorial_score - a.editorial_score).slice(0, limit));
+
+  const [rows] = await db.execute(`SELECT COALESCE(NULLIF(tool_slug, ''), REPLACE(path, '/outil/', '')) AS slug, COUNT(*) AS visits FROM page_views WHERE (tool_slug IS NOT NULL OR path LIKE '/outil/%') AND created_at >= DATE_SUB(NOW(), INTERVAL 1 ${period}) GROUP BY slug ORDER BY visits DESC LIMIT ${limit}`);
+  const trending = rows.map((row) => tools.find((tool) => tool.slug === row.slug)).filter(Boolean);
+  const fill = tools.filter((tool) => !trending.some((item) => item.slug === tool.slug)).sort((a, b) => b.editorial_score - a.editorial_score);
+  res.json([...trending, ...fill].slice(0, limit));
+}));
 router.get("/tools/:slug", asyncHandler(async (req, res) => {
   const tool = await getTool(req.params.slug);
   if (!tool) return res.status(404).json({ error: "Outil introuvable" });
@@ -36,7 +48,9 @@ router.get("/articles/:slug", asyncHandler(async (req, res) => {
   res.json(article);
 }));
 router.post("/analytics/view", asyncHandler(async (req, res) => {
-  await insert("page_views", { path: clean(req.body.path || req.path), tool_slug: clean(req.body.tool_slug), source: clean(req.body.source), device_type: clean(req.body.device_type) });
+  const path = clean(req.body.path || req.path);
+  const inferredTool = path.startsWith("/outil/") ? path.replace("/outil/", "").split("/")[0] : clean(req.body.tool_slug);
+  await insert("page_views", { path, tool_slug: inferredTool, source: clean(req.body.source), device_type: clean(req.body.device_type) });
   res.status(204).end();
 }));
 
@@ -51,7 +65,6 @@ router.post("/admin/login", asyncHandler(async (req, res) => {
     res.cookie("admin_token", signAdmin({ id: 1, email }), cookieOptions());
     return res.json({ email });
   }
-
   if (!db) return res.status(503).json({ error: "Accès admin non configuré" });
 
   const [rows] = await db.execute("SELECT * FROM admins WHERE email = :email LIMIT 1", { email });
