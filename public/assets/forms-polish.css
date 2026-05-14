@@ -53,6 +53,38 @@ textarea::placeholder {
   color: rgba(170,179,199,.76);
 }
 
+/* Homepage guide steps */
+.guide-section {
+  padding-top: 56px;
+}
+.guide-section .section-head p:not(.eyebrow) {
+  max-width: 680px;
+  margin-top: 0;
+  color: rgba(226,232,240,.78);
+}
+.guide-flow {
+  align-items: stretch;
+}
+.guide-flow article {
+  min-height: 260px;
+  align-content: start;
+  gap: 14px;
+  padding: 24px;
+}
+.guide-flow article span {
+  display: block;
+  color: #f8fafc;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.18;
+}
+.guide-flow article p {
+  margin: 0;
+  color: rgba(226,232,240,.76);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
 /* Contact page */
 .contact-form {
   position: relative;
@@ -146,6 +178,9 @@ textarea::placeholder {
   }
   .page h1 {
     font-size: 32px;
+  }
+  .guide-flow article {
+    min-height: auto;
   }
   .contact-form,
   .review-form {
