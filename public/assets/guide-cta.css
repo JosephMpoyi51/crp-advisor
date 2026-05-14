@@ -1,0 +1,21 @@
+.guide-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+.guide-compare-btn {
+  min-height: 54px;
+  padding: 0 26px;
+  border-color: rgba(103,232,249,.34);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #22d3ee, #8b5cf6 58%, #f59e0b);
+  box-shadow: 0 18px 50px rgba(34,211,238,.16), 0 18px 50px rgba(139,92,246,.14);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.guide-compare-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 70px rgba(34,211,238,.2), 0 24px 70px rgba(139,92,246,.18);
+}
+@media (max-width: 760px) {
+  .guide-compare-btn { width: 100%; }
+}
