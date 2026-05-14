@@ -1,0 +1,128 @@
+CREATE TABLE IF NOT EXISTS categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  slug VARCHAR(120) NOT NULL UNIQUE,
+  name VARCHAR(180) NOT NULL,
+  description TEXT,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS tools (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  slug VARCHAR(160) NOT NULL UNIQUE,
+  name VARCHAR(220) NOT NULL,
+  category VARCHAR(120) NOT NULL,
+  description TEXT NOT NULL,
+  price_label VARCHAR(160) DEFAULT '',
+  monthly_price DECIMAL(10,2) DEFAULT 0,
+  api_available TINYINT(1) DEFAULT 0,
+  french_support TINYINT(1) DEFAULT 0,
+  levels JSON,
+  use_cases JSON,
+  advantages JSON,
+  limits_json JSON,
+  ideal_profile TEXT,
+  alternatives JSON,
+  affiliate_url TEXT,
+  logo_url TEXT,
+  editorial_score INT DEFAULT 0,
+  g2_rating DECIMAL(3,1),
+  is_featured TINYINT(1) DEFAULT 0,
+  is_published TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_tools_category (category),
+  INDEX idx_tools_published (is_published)
+);
+
+CREATE TABLE IF NOT EXISTS promo_codes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(120) NOT NULL,
+  description TEXT NOT NULL,
+  tool_slug VARCHAR(160),
+  discount VARCHAR(120),
+  url TEXT,
+  expires_at DATE NULL,
+  active TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tool_slug VARCHAR(160) NOT NULL,
+  first_name VARCHAR(120) NOT NULL,
+  email VARCHAR(220) NOT NULL,
+  rating INT NOT NULL,
+  content TEXT NOT NULL,
+  approved TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(120),
+  email VARCHAR(220) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS leads (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(120),
+  email VARCHAR(220) NOT NULL,
+  answers JSON,
+  results JSON,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(180) NOT NULL,
+  email VARCHAR(220) NOT NULL,
+  subject VARCHAR(220),
+  message TEXT NOT NULL,
+  handled TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS tool_suggestions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tool_name VARCHAR(220) NOT NULL,
+  website TEXT,
+  category VARCHAR(120),
+  submitter_name VARCHAR(180),
+  submitter_email VARCHAR(220),
+  message TEXT,
+  status VARCHAR(40) DEFAULT 'new',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS articles (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  slug VARCHAR(180) NOT NULL UNIQUE,
+  title VARCHAR(240) NOT NULL,
+  excerpt TEXT,
+  content LONGTEXT,
+  category VARCHAR(120),
+  image_url TEXT,
+  published TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS page_views (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  path VARCHAR(255) NOT NULL,
+  tool_slug VARCHAR(160),
+  source VARCHAR(180),
+  device_type VARCHAR(60),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_page_views_path (path),
+  INDEX idx_page_views_created (created_at)
+);
+
+CREATE TABLE IF NOT EXISTS admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(220) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
