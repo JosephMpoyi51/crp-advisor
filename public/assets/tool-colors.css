@@ -1,0 +1,23 @@
+.tool-card h3 {
+  background: linear-gradient(135deg, #fef3c7, #67e8f9 48%, #c4b5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.tool-card:nth-child(2n) h3 {
+  background-image: linear-gradient(135deg, #bbf7d0, #93c5fd 52%, #f0abfc);
+}
+.tool-card:nth-child(3n) h3 {
+  background-image: linear-gradient(135deg, #fde68a, #fca5a5 48%, #c4b5fd);
+}
+.logo {
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+}
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+  padding: 8px;
+}
