@@ -63,10 +63,10 @@
   }
 
   function articleSlide(article) {
-    return `<a class="latest-slide latest-slide-media" href="/blog/${article.slug}" data-link><img src="${escapeAttribute(articleImage(article))}" alt="" loading="lazy"><div class="latest-slide-body"><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 50))}</p><div class="article-meta"><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></div></a>`;
+    return `<a class="latest-slide latest-slide-media" href="/blog/${article.slug}" data-link><img src="${escapeAttribute(articleImage(article))}" alt="" loading="lazy"><div class="latest-slide-body"><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 60))}</p><div class="article-meta"><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></div></a>`;
   }
   function articleCard(article) {
-    return `<a class="blog-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h2>${escapeHtml(article.title)}</h2><p>${escapeHtml(articleExcerpt(article, 50))}</p><div class="article-meta"><span>${escapeHtml(article.author || "CRP Advisor")}</span><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></a>`;
+    return `<a class="blog-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h2>${escapeHtml(article.title)}</h2><p>${escapeHtml(articleExcerpt(article, 60))}</p><div class="article-meta"><span>${escapeHtml(article.author || "CRP Advisor")}</span><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></a>`;
   }
   function relatedCard(article) {
     return `<a class="related-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 35))}</p></a>`;
