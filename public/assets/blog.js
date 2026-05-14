@@ -63,20 +63,20 @@
   }
 
   function articleSlide(article) {
-    return `<a class="latest-slide latest-slide-media" href="/blog/${article.slug}" data-link><img src="${escapeAttribute(articleImage(article))}" alt="" loading="lazy"><div class="latest-slide-body"><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 50, 80))}</p><div class="article-meta"><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></div></a>`;
+    return `<a class="latest-slide latest-slide-media" href="/blog/${article.slug}" data-link><img src="${escapeAttribute(articleImage(article))}" alt="" loading="lazy"><div class="latest-slide-body"><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 50))}</p><div class="article-meta"><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></div></a>`;
   }
   function articleCard(article) {
-    return `<a class="blog-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h2>${escapeHtml(article.title)}</h2><p>${escapeHtml(articleExcerpt(article, 80, 95))}</p><div class="article-meta"><span>${escapeHtml(article.author || "CRP Advisor")}</span><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></a>`;
+    return `<a class="blog-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h2>${escapeHtml(article.title)}</h2><p>${escapeHtml(articleExcerpt(article, 50))}</p><div class="article-meta"><span>${escapeHtml(article.author || "CRP Advisor")}</span><span>${formatDate(article.published_at)}</span><span>${Number(article.reading_minutes || readingMinutes(article.content))} min</span></div></a>`;
   }
   function relatedCard(article) {
-    return `<a class="related-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 35, 55))}</p></a>`;
+    return `<a class="related-card" href="/blog/${article.slug}" data-link><span class="tag">${escapeHtml(article.category || "Guide")}</span><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(articleExcerpt(article, 35))}</p></a>`;
   }
   function weeklyToolCard(tool) {
     const icon = tool.icon_url ? `<div class="logo"><img src="${escapeAttribute(tool.icon_url)}" alt="" loading="lazy" onerror="this.remove()"></div>` : `<div class="logo">${escapeHtml(tool.name?.[0] || "C")}</div>`;
     return `<a class="weekly-tool" href="/outil/${tool.slug}" data-link>${icon}<h3>${escapeHtml(tool.name)}</h3><p>${escapeHtml(tool.description || "")}</p><span class="tag">${tool.editorial_score || 0}/100</span></a>`;
   }
   function articleImage(article) { return article.featured_image_url || sliderDefaultImages[article.slug] || "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1400&q=80"; }
-  function articleExcerpt(article, minWords, maxWords) { const text = `${article.excerpt || ""} ${article.content || ""}`.replace(/\s+/g, " ").trim(); const words = text.split(" ").filter(Boolean); const limit = words.length >= minWords ? maxWords : words.length; return `${words.slice(0, limit).join(" ")}${words.length > limit ? "..." : ""}`; }
+  function articleExcerpt(article, maxWords) { const text = `${article.excerpt || ""} ${article.content || ""}`.replace(/\s+/g, " ").trim(); const words = text.split(" ").filter(Boolean); return `${words.slice(0, maxWords).join(" ")}${words.length > maxWords ? "..." : ""}`; }
   function paragraphs(content) { return String(content || "").split(/\n{2,}/).filter(Boolean); }
   function readingMinutes(content) { return Math.max(1, Math.ceil(String(content || "").split(/\s+/).length / 220)); }
   function initials(name = "CRP Advisor") { return name.split(/\s+/).map((word) => word[0]).join("").slice(0, 2).toUpperCase(); }
