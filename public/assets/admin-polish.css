@@ -1,7 +1,13 @@
-.admin-layout {
+.admin-layout,
+.admin-login-only {
+  min-height: calc(100vh - 76px);
   background:
     radial-gradient(circle at 82% 12%, rgba(34,211,238,.12), transparent 28%),
     radial-gradient(circle at 16% 18%, rgba(139,92,246,.16), transparent 32%);
+}
+.admin-login-only {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 .admin-main:has(.admin-login-card) {
   display: grid;
