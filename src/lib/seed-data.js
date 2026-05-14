@@ -12,16 +12,29 @@ const categories = [
 ];
 
 const iconUrls = {
-  chatgpt: "https://www.google.com/s2/favicons?domain=openai.com&sz=64",
-  claude: "https://www.google.com/s2/favicons?domain=anthropic.com&sz=64",
+  chatgpt: "https://www.google.com/s2/favicons?domain=chatgpt.com&sz=64",
+  claude: "https://www.google.com/s2/favicons?domain=claude.ai&sz=64",
   mistral: "https://www.google.com/s2/favicons?domain=mistral.ai&sz=64",
   gemini: "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=64",
   perplexity: "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=64",
   "github-copilot": "https://www.google.com/s2/favicons?domain=github.com&sz=64",
   midjourney: "https://www.google.com/s2/favicons?domain=midjourney.com&sz=64",
-  "notion-ai": "https://www.google.com/s2/favicons?domain=notion.so&sz=64",
+  "notion-ai": "https://www.google.com/s2/favicons?domain=notion.com&sz=64",
   elevenlabs: "https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=64",
   runway: "https://www.google.com/s2/favicons?domain=runwayml.com&sz=64"
+};
+
+const officialUrls = {
+  chatgpt: "https://chatgpt.com/",
+  claude: "https://claude.ai/",
+  mistral: "https://mistral.ai/",
+  gemini: "https://gemini.google.com/",
+  perplexity: "https://www.perplexity.ai/",
+  "github-copilot": "https://github.com/features/copilot",
+  midjourney: "https://www.midjourney.com/",
+  "notion-ai": "https://www.notion.com/product/ai",
+  elevenlabs: "https://elevenlabs.io/",
+  runway: "https://runwayml.com/"
 };
 
 const tools = [
@@ -56,7 +69,7 @@ function tool(slug, name, category, description, priceLabel, monthlyPrice, apiAv
     g2_rating: 4.5,
     is_featured: featured,
     icon_url: iconUrls[slug] || "",
-    affiliate_url: "#",
+    affiliate_url: officialUrls[slug] || "#",
     use_cases: ["Usage professionnel", "Gain de temps", "Création assistée"],
     advantages: ["Interface moderne", "Bon rapport valeur", "Solution reconnue"],
     limits: ["Vérifier les données sensibles", "Comparer selon votre contexte"],
