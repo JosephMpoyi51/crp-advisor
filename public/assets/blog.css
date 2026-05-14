@@ -1,0 +1,99 @@
+.blog-page h1,
+.article-page h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.04; }
+.blog-page h2,
+.article-page h2 { font-size: clamp(24px, 3vw, 34px); }
+.blog-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.blog-card {
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.035));
+}
+.blog-card h2 { margin: 0; }
+.article-page {
+  width: min(920px, calc(100% - 32px));
+}
+.article-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin: 22px 0 26px;
+  color: var(--muted);
+}
+.author-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-weight: 800;
+}
+.author-avatar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--cyan));
+  color: white;
+  font-weight: 900;
+}
+.article-content {
+  display: grid;
+  gap: 18px;
+  margin: 28px 0;
+  font-size: 18px;
+}
+.article-content p { margin: 0; color: #d7def0; }
+.share-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 26px 0 36px;
+}
+.share-row a,
+.share-row button {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+.related-grid,
+.weekly-tools {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.related-card,
+.weekly-tool {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.045);
+}
+.related-card h3,
+.weekly-tool h3 { margin: 0 0 8px; font-size: 18px; }
+.article-section { margin-top: 54px; }
+@media (max-width: 920px) {
+  .blog-list,
+  .related-grid,
+  .weekly-tools { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .blog-list,
+  .related-grid,
+  .weekly-tools { grid-template-columns: 1fr; }
+  .article-content { font-size: 16px; }
+}
