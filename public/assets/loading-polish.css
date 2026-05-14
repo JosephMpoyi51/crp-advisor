@@ -1,0 +1,58 @@
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(5,6,20,.68);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+.page-loader.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.page-loader-card {
+  width: min(360px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 26px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.045));
+  box-shadow: 0 28px 90px rgba(0,0,0,.34);
+}
+.page-loader-spinner {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--cyan), var(--primary), transparent 72%);
+  animation: loaderSpin .82s linear infinite;
+  position: relative;
+}
+.page-loader-spinner::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: inherit;
+  background: #080a18;
+}
+.page-loader-card strong {
+  font-size: 17px;
+  line-height: 1.2;
+}
+.page-loader-card span {
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+@keyframes loaderSpin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-loader-spinner { animation: none; }
+}
