@@ -40,7 +40,10 @@ async function seedDefaults(db) {
   if (!toolRows[0].total) {
     for (const item of tools) await db.execute("INSERT INTO tools(slug, name, category, description, price_label, monthly_price, api_available, french_support, levels, editorial_score, g2_rating, is_featured, icon_url, affiliate_url, use_cases, advantages, limits, ideal_profile, alternatives) VALUES(:slug, :name, :category, :description, :price_label, :monthly_price, :api_available, :french_support, :levels, :editorial_score, :g2_rating, :is_featured, :icon_url, :affiliate_url, :use_cases, :advantages, :limits, :ideal_profile, :alternatives)", serializeTool(item));
   } else {
-    for (const item of tools) await db.execute("UPDATE tools SET icon_url = :icon_url, affiliate_url = :affiliate_url WHERE slug = :slug AND (affiliate_url IS NULL OR affiliate_url = '' OR affiliate_url = '#')", { slug: item.slug, icon_url: item.icon_url || "", affiliate_url: item.affiliate_url || "#" });
+    for (const item of tools) {
+      await db.execute("UPDATE tools SET icon_url = :icon_url WHERE slug = :slug AND (icon_url IS NULL OR icon_url = '')", { slug: item.slug, icon_url: item.icon_url || "" });
+      await db.execute("UPDATE tools SET affiliate_url = :affiliate_url WHERE slug = :slug AND (affiliate_url IS NULL OR affiliate_url = '' OR affiliate_url = '#')", { slug: item.slug, affiliate_url: item.affiliate_url || "#" });
+    }
   }
 }
 
