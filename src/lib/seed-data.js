@@ -11,6 +11,19 @@ const categories = [
   { slug: "design", name: "Design", description: "UI, présentations, marque et assets visuels" }
 ];
 
+const iconUrls = {
+  chatgpt: "https://www.google.com/s2/favicons?domain=openai.com&sz=64",
+  claude: "https://www.google.com/s2/favicons?domain=anthropic.com&sz=64",
+  mistral: "https://www.google.com/s2/favicons?domain=mistral.ai&sz=64",
+  gemini: "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=64",
+  perplexity: "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=64",
+  "github-copilot": "https://www.google.com/s2/favicons?domain=github.com&sz=64",
+  midjourney: "https://www.google.com/s2/favicons?domain=midjourney.com&sz=64",
+  "notion-ai": "https://www.google.com/s2/favicons?domain=notion.so&sz=64",
+  elevenlabs: "https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=64",
+  runway: "https://www.google.com/s2/favicons?domain=runwayml.com&sz=64"
+};
+
 const tools = [
   tool("chatgpt", "ChatGPT", "redaction", "Assistant IA polyvalent pour rédiger, analyser, coder, résumer et générer des idées.", "Gratuit", 0, true, true, ["debutant", "intermediaire", "avance"], 92, true),
   tool("claude", "Claude", "redaction", "Assistant reconnu pour les textes nuancés et l'analyse de longs documents.", "Gratuit", 0, true, true, ["intermediaire", "avance"], 90, true),
@@ -42,6 +55,7 @@ function tool(slug, name, category, description, priceLabel, monthlyPrice, apiAv
     editorial_score: score,
     g2_rating: 4.5,
     is_featured: featured,
+    icon_url: iconUrls[slug] || "",
     affiliate_url: "#",
     use_cases: ["Usage professionnel", "Gain de temps", "Création assistée"],
     advantages: ["Interface moderne", "Bon rapport valeur", "Solution reconnue"],
