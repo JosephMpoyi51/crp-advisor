@@ -5,6 +5,7 @@
   margin-bottom: 28px;
   border-radius: 18px;
 }
+.article-editor-head { display: flex; justify-content: space-between; gap: 16px; align-items: start; }
 .article-editor h2,
 .article-admin-list h2 { font-size: clamp(22px, 2.4vw, 30px); }
 .article-form { display: grid; gap: 16px; }
@@ -15,7 +16,14 @@
 }
 .article-form label { display: grid; gap: 7px; color: rgba(248,250,252,.92); font-size: 13px; font-weight: 850; }
 .article-form textarea[name="excerpt"] { min-height: 90px; }
-.article-form textarea[name="content"] { min-height: 260px; }
+.rich-editor-wrap { border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.045); overflow: hidden; }
+.editor-toolbar { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.04); }
+.editor-toolbar button { min-height: 34px; padding: 0 11px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.06); color: var(--text); font-weight: 850; cursor: pointer; }
+.tiptap-editor { min-height: 300px; padding: 18px; color: #f8fafc; }
+.tiptap-editor .ProseMirror, .tiptap-fallback { min-height: 260px; outline: none; }
+.tiptap-editor p { color: #d7def0; }
+.tiptap-editor h2 { font-size: 28px; margin: 20px 0 10px; }
+.tiptap-editor blockquote { margin: 16px 0; padding-left: 14px; border-left: 3px solid var(--cyan); color: #cbd5e1; }
 .media-tools { display: grid; grid-template-columns: minmax(220px, 280px) 1fr; gap: 14px; align-items: stretch; }
 .upload-box,
 .selected-media {
@@ -37,5 +45,7 @@
 .media-item img { width: 100%; height: 94px; object-fit: cover; display: block; }
 .media-item span { position: absolute; right: 6px; bottom: 6px; padding: 3px 6px; border-radius: 999px; background: rgba(0,0,0,.62); color: white; font-size: 11px; }
 .article-admin-list { display: grid; gap: 14px; }
-@media (max-width: 920px) { .article-form-grid, .media-tools { grid-template-columns: 1fr; } .media-library { grid-template-columns: repeat(3, 1fr); } }
+.admin-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-row-actions .btn { min-height: 34px; padding: 0 10px; font-size: 13px; }
+@media (max-width: 920px) { .article-editor-head, .article-form-grid, .media-tools { grid-template-columns: 1fr; flex-direction: column; } .media-library { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 560px) { .media-library { grid-template-columns: repeat(2, 1fr); } }
